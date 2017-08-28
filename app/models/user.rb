@@ -8,20 +8,31 @@ class User < ApplicationRecord
     meetup_api = MeetupApi.new
     
     setting = ConfigurationSetting.get_settings
-    
+    is_success = false
     unless setting.groups_data_completed
       CITIES[setting.current_city_index..1000].each do |city|
-        
+        setting = setting.reload
+        offset = setting.groups_offset
 
-        setting.update_attribute(:current_city_index, setting.current_city_index + index)
-        result = get_groups(meetup_api, setting.groups_offset, city)
+        while 1 do
+          result = get_groups(meetup_api, offset, city)
+          is_success = result[:success]
+          
+          if result[:count] < 200
+            break
+          else
+            offset = offset + 1
+            setting.update_attribute(:groups_offset, offset)
+          end
+        end
 
-        unless result[:success]
-          break
+        if is_success
+          setting.update_attributes(current_city_index: ConfigurationSetting.get_settings.current_city_index + 1, groups_offset: 0)
         else
-
+          break
         end
       end
+      setting.update_attribute(:groups_data_completed, true)
     end
 
     #unless setting.users_data_completed
