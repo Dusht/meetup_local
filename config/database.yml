@@ -12,8 +12,8 @@ default: &default
 development:
   <<: *default
   database: meetup_local
-  username: ENV['LOCAL_DATABASE_USERNAME']
-  password: ENV['LOCAL_DATABASE_PASSWORD']
+  username: postgres
+  password: mindfire
   host: localhost 
 
 # Warning: The database defined as "test" will be erased and
