@@ -33,7 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'meetup_client'
-gem 'acts-as-taggable-on', '~> 4.0'
+gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
